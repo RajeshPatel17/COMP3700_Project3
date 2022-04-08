@@ -5,29 +5,31 @@ public class StoreManager {
 
     private RemoteDataAdapter dao;
 
-    private NoteView noteView = null;
-
-    private SearchView searchView = null;
-
     private MainMenuView mainMenuView = null;
-
-    public NoteView getNoteView() {
-        return noteView;
-    }
-
-    public SearchView getSearchView() {
-        return searchView;
-    }
+    private OrderView orderView = null;
+    private CustomerView customerView = null;
+    private ProductView productView = null;
 
     public MainMenuView getMainMenuView() {
         return mainMenuView;
     }
 
-    private NoteController noteController = null;
+    public ProductView getProductView() {
+        return productView;
+    }
 
-    private SearchController searchController = null;
+    public OrderView getOrderView() {
+        return orderView;
+    }
+
+    public CustomerView getCustomerView() {
+        return customerView;
+    }
 
     private MainMenuController mainMenuController = null;
+    private OrderController orderController = null;
+    private CustomerController customerController = null;
+    private ProductController productController = null;
 
     public static StoreManager getInstance() {
         if (instance == null)
@@ -45,9 +47,11 @@ public class StoreManager {
         dao.connect();
         mainMenuView = new MainMenuView();
         mainMenuController = new MainMenuController(mainMenuView);
-        noteView = new NoteView();
-        noteController = new NoteController(noteView, dao);
-        searchView = new SearchView();
-        searchController = new SearchController(searchView, dao);
+        orderView = new OrderView();
+        orderController = new OrderController(orderView, dao);
+        customerView = new CustomerView();
+        customerController = new CustomerController(customerView, dao);
+        productView = new ProductView();
+        productController = new ProductController(productView, dao);
     }
 }
