@@ -1,3 +1,4 @@
+//remove note implementation and insert load, save, update to cust, order, and product
 import com.google.gson.Gson;
 
 import java.io.DataInputStream;

@@ -58,7 +58,7 @@ public class DataServer
     }
 }
 
-
+// Add load, save and update requests for order, customer, product. remote note
 // ClientHandler class
 class ClientHandler extends Thread
 {

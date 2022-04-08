@@ -1,3 +1,4 @@
+//remove note views and controllers and add product, order, and cust views and controllers
 public class StoreManager {
 
     private static StoreManager instance = null;

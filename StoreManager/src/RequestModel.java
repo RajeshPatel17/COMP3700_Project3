@@ -1,3 +1,4 @@
+//remove note request nums and add load, save, and update for cust, order, and product
 public class RequestModel {
 
     static final public int EXIT_REQUEST = 0;

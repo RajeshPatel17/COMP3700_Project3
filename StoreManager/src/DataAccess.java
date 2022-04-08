@@ -1,9 +1,16 @@
+/* Interface for interactions with SQL database */
 public interface DataAccess {
     void connect();
+
+    void saveProduct(ProductModel product);
+
+    ProductModel loadProduct(int productID);
+
+    boolean saveOrder(OrderModel order);
+
+    OrderModel loadOrder(int orderID);
     
-    void saveNote(NoteModel note);
+    boolean saveCustomer(CustomerModel customer);
 
-    NoteModel loadNote(int noteID);
-
-    SearchModel searchNotes(String keyword);
+    CustomerModel loadCustomer(int customerID);
 }

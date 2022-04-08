@@ -1,22 +1,26 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class MainMenuView extends JFrame{
+/* Main view that gets displayed when program is executed.
+ * Allows user to toggle between input menus
+*/
+public class MainMenuView extends JFrame {
 
-    public JButton loadSaveButton = new JButton("Load/Save");
-    public JButton searchButton = new JButton("Search");
+    public JButton ProdButton = new JButton("Product");
+    public JButton CustButton = new JButton("Customer");
+    public JButton OrdButton = new JButton("Order");
 
-    public MainMenuView() {
+    public MainMenuView(){
 
         this.setTitle("Main Menu");
-        this.setSize(new Dimension(300,150));
+        this.setSize(new Dimension(400,100));
         this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));    // make this window with box layout
 
-        JPanel line1 = new JPanel();
-        line1.add(loadSaveButton);
-        line1.add(searchButton);
-        this.getContentPane().add(line1);
+        JPanel ButtonPanel = new JPanel();
+        ButtonPanel.add(ProdButton);
+        ButtonPanel.add(CustButton);
+        ButtonPanel.add(OrdButton);
 
-
+        this.getContentPane().add(ButtonPanel);
     }
 }
