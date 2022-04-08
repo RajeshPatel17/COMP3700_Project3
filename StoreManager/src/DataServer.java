@@ -103,45 +103,10 @@ class ClientHandler extends Thread
                         exit = true;
                         break;
                     
-                    case RequestModel.LOAD_NOTE_REQUEST:
-                        int id = Integer.parseInt(req.body);
-                        System.out.println("The Client asks for a note with ID = " + id);
-                        NoteModel model = dao.loadNote(id);
-                        if (model != null) {
-                            res.code = ResponseModel.OK;
-                            res.body = gson.toJson(model);
-                        } else {
-                            res.code = ResponseModel.DATA_NOT_FOUND;
-                            res.body = "";
-                        }
-                        break;
+                    write case customer save load update
+                    write case order save load update
+                    write case product save load update
 
-                    case RequestModel.SAVE_NOTE_REQUEST:
-                        NoteModel note = gson.fromJson(req.body, NoteModel.class);
-                        System.out.println("The Client asks to store the Note: \n" + note.toString());
-                        dao.saveNote(note);
-                        NoteModel confirm = dao.loadNote(note.noteID);
-                        if(confirm != null){
-                            res.code = ResponseModel.OK;
-                            res.body = gson.toJson(note);
-                        } else {
-                            res.code = ResponseModel.DATA_NOT_FOUND;
-                            res.body = "";
-                        }
-                        break;
-                    
-                    case RequestModel.SEARCH_NOTE_REQUEST:
-                        String keyword = req.body;
-                        SearchModel found = dao.searchNotes(keyword);
-                        if(found != null){
-                            res.code = ResponseModel.OK;
-                            res.body = gson.toJson(found);
-                        } else {
-                            res.code = ResponseModel.DATA_NOT_FOUND;
-                            res.body = "";
-                        }
-                        break;
-                    
                     default:
                         res.code = ResponseModel.UNKNOWN_REQUEST;
                         res.body = "";
