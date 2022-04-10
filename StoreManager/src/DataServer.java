@@ -58,7 +58,7 @@ public class DataServer
     }
 }
 
-// Add load, save and update requests for order, customer, product. remote note
+
 // ClientHandler class
 class ClientHandler extends Thread
 {
@@ -103,9 +103,85 @@ class ClientHandler extends Thread
                         exit = true;
                         break;
                     
-                    write case customer save load update
-                    write case order save load update
-                    write case product save load update
+                    case RequestModel.LOAD_CUSTOMER_REQUEST:
+                        int customerID = Integer.parseInt(req.body);
+                        System.out.println("The client asks for a customer with ID of " + customerID);
+                        CustomerModel customerModelLoad = dao.loadCustomer(customerID);
+                        if(customerModelLoad != null){
+                            res.code = ResponseModel.OK;
+                            res.body = gson.toJson(customerModelLoad);
+                        } else {
+                            res.code = ResponseModel.DATA_NOT_FOUND;
+                            res.body = "";
+                        }
+                        break;
+                    
+                    case RequestModel.SAVE_CUSTOMER_REQUEST:
+                        CustomerModel customerModelSave = gson.fromJson(req.body, CustomerModel.class);
+                        System.out.println("The client asks to store the customer" + gson.toJson(customerModelSave));
+                        dao.saveCustomer(customerModelSave);
+                        CustomerModel confirmCustomer = dao.loadCustomer(customerModelSave.customerID);
+                        if(confirmCustomer != null){
+                            res.code = ResponseModel.OK;
+                            res.body = gson.toJson(confirmCustomer);
+                        } else {
+                            res.code = ResponseModel.DATA_NOT_FOUND;
+                            res.body = "";
+                        }
+                        break;
+                        
+                    case RequestModel.LOAD_ORDER_REQUEST:
+                        int orderID = Integer.parseInt(req.body);
+                        System.out.println("The client asks for an order with ID of " + orderID);
+                        OrderModel orderModelLoad = dao.loadOrder(orderID);
+                        if(orderModelLoad != null){
+                            res.code = ResponseModel.OK;
+                            res.body = gson.toJson(orderModelLoad);
+                        } else {
+                            res.code = ResponseModel.DATA_NOT_FOUND;
+                            res.body = "";
+                        }
+                        break;                    
+                    
+                    case RequestModel.SAVE_ORDER_REQUEST:
+                        OrderModel orderModelSave = gson.fromJson(req.body, OrderModel.class);
+                        System.out.println("The client asks to store the order" + gson.toJson(orderModelSave));
+                        dao.saveOrder(orderModelSave);
+                        OrderModel orderConfirm = dao.loadOrder(orderModelSave.orderID);
+                        if(orderConfirm != null) {
+                            res.code = ResponseModel.OK;
+                            res.body = gson.toJson(orderConfirm);
+                        } else {
+                            res.code = ResponseModel.DATA_NOT_FOUND;
+                            res.body = "";
+                        }
+                        break;
+
+                    case RequestModel.LOAD_PRODUCT_REQUEST:
+                        int productID = Integer.parseInt(req.body);
+                        System.out.println("The client asks for a product with ID of " + productID);
+                        ProductModel productModelLoad = dao.loadProduct(productID);
+                        if(productModelLoad != null) {
+                            res.code = ResponseModel.OK;
+                            res.body = gson.toJson(productModelLoad);
+                        } else {
+                            res.code = ResponseModel.DATA_NOT_FOUND;
+                            res.body = "";
+                        }
+                        break;
+
+                    case RequestModel.SAVE_PRODUCT_REQUEST:
+                        ProductModel productModelSave = gson.fromJson(req.body, ProductModel.class);
+                        System.out.println("The client asks to store the product " + gson.toJson(productModelSave));
+                        dao.saveProduct(productModelSave);
+                        ProductModel productConfirm = dao.loadProduct(productModelSave.productID);
+                        if(productConfirm != null){
+                            res.code = ResponseModel.OK;
+                            res.body = gson.toJson(productConfirm);
+                        } else {
+                            res.code = ResponseModel.DATA_NOT_FOUND;
+                            res.body = "";
+                        }
 
                     default:
                         res.code = ResponseModel.UNKNOWN_REQUEST;

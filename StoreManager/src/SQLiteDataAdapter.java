@@ -24,7 +24,7 @@ public class SQLiteDataAdapter implements DataAccess {
     }
 
     @Override
-    public void saveProduct(ProductModel product) {
+    public boolean saveProduct(ProductModel product) {
         try {
 
             Statement stmt = conn.createStatement();
@@ -47,8 +47,10 @@ public class SQLiteDataAdapter implements DataAccess {
                 );
 
             }
+            return true;
         } catch (Exception ex) {
             ex.printStackTrace();
+            return false;
         }
     }
 
@@ -79,7 +81,7 @@ public class SQLiteDataAdapter implements DataAccess {
 
             Statement stmt = conn.createStatement();
 
-            if (loadOrder(order.orderID) == null) {           // this is a new product!
+            if (loadOrder(order.orderID) == null) {           // this is a new order!
                 stmt.execute("INSERT INTO Orders(OrderID, OrderDate, CustomerID, TotalCost, TotalTax) VALUES ("
                         + order.orderID + ","
                         + '\'' + order.orderDate + '\'' + ","
@@ -134,7 +136,7 @@ public class SQLiteDataAdapter implements DataAccess {
 
             Statement stmt = conn.createStatement();
 
-            if (loadCustomer(customer.customerID) == null) {           // this is a new product!
+            if (loadCustomer(customer.customerID) == null) {           // this is a new customer!
                 stmt.execute("INSERT INTO Customers(CustomerID, CustomerName, DateOfBirth, Address) VALUES ("
                         + customer.customerID + ","
                         + '\'' + customer.customerName + '\'' + ","
