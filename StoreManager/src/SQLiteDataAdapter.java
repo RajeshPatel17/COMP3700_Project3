@@ -58,6 +58,7 @@ public class SQLiteDataAdapter implements DataAccess {
     public ProductModel loadProduct(int productID) {
         ProductModel product = null;
         try {
+            
             Statement stmt = conn.createStatement();
             
             ResultSet rs = stmt.executeQuery("SELECT * FROM Product WHERE ProductID = " + productID);

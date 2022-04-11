@@ -182,7 +182,8 @@ class ClientHandler extends Thread
                             res.code = ResponseModel.DATA_NOT_FOUND;
                             res.body = "";
                         }
-
+                        break;
+                        
                     default:
                         res.code = ResponseModel.UNKNOWN_REQUEST;
                         res.body = "";
