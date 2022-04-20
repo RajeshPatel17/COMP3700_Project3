@@ -7,20 +7,16 @@ public class MainMenuController implements ActionListener{
 
     public MainMenuController(MainMenuView view){
         thisMainView = view;
-        thisMainView.ProdButton.addActionListener(this);
+        thisMainView.ManaButton.addActionListener(this);
         thisMainView.CustButton.addActionListener(this);
-        thisMainView.OrdButton.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
         if(event.getSource() == thisMainView.CustButton){
-            StoreManager.getInstance().getCustomerView().setVisible(true);
+            Customer.getInstance().getCustomerLoginView().setVisible(true);
         }
-        if(event.getSource() == thisMainView.OrdButton){
-            StoreManager.getInstance().getOrderView().setVisible(true);
-        }
-        if(event.getSource() == thisMainView.ProdButton){
+        if(event.getSource() == thisMainView.ManaButton){
             StoreManager.getInstance().getProductView().setVisible(true);
         }
     }
