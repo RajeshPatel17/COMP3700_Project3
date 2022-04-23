@@ -6,12 +6,18 @@ public class StoreManager {
     private RemoteDataAdapter dao;
 
     private ProductView productView = null;
+    private ManaLoginView manaLoginView = null;
 
     public ProductView getProductView() {
         return productView;
     }
+    
+    public ManaLoginView getManaLoginView() {
+        return ManaLoginView;
+    }
 
     private ProductController productController = null;
+    private ManaLoginController manaLoginController = null;
 
     public static StoreManager getInstance() {
         if (instance == null)
@@ -29,5 +35,7 @@ public class StoreManager {
         dao.connect();
         productView = new ProductView();
         productController = new ProductController(productView, dao);
+        manaLoginView = new ManaLoginView();
+        manaLoginController = new ManaLoginController(manaLoginView, dao);
     }
 }

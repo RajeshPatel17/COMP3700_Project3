@@ -13,4 +13,8 @@ public interface DataAccess {
     boolean saveCustomer(CustomerModel customer);
 
     CustomerModel loadCustomer(int customerID);
+
+    int loginCustomer(String userName, byte[] encryptedPassword, String secretKey, byte[] initializationVector);
+
+
 }

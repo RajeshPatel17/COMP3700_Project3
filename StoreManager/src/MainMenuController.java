@@ -15,9 +15,11 @@ public class MainMenuController implements ActionListener{
     public void actionPerformed(ActionEvent event) {
         if(event.getSource() == thisMainView.CustButton){
             Customer.getInstance().getCustomerLoginView().setVisible(true);
+            MainApp.getInstance().getMainMenuView().setVisible(false);
         }
         if(event.getSource() == thisMainView.ManaButton){
-            StoreManager.getInstance().getProductView().setVisible(true);
+            StoreManager.getInstance().getManagerLoginView().setVisible(true);
+            MainApp.getInstance().getMainMenuView().setVisible(false);
         }
     }
 
