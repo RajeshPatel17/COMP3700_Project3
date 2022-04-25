@@ -21,6 +21,8 @@ public class Customer {
     private ProductSearchView productSearchView = null;
     private OrderHistoryView orderHistoryView = null;
     private MCCOrderView mccOrderView = null;
+    private AddProductView addProductView = null;
+    private RemoveProductView removeProductView = null;
 
     public CustomerModel getCustomerModel(){
         return customerModel;
@@ -74,6 +76,14 @@ public class Customer {
         return mccOrderView;
     }
 
+    public AddProductView getAddProductView() {
+        return addProductView;
+    }
+
+    public RemoveProductView getRemoveProductView() {
+        return removeProductView;
+    }
+
     private ProductController productController = null;
     private OrderController orderController = null;
     private CustLoginController custLoginController = null;
@@ -86,6 +96,20 @@ public class Customer {
     private ProductSearchController productSearchController = null;
     private OrderHistoryController orderHistoryController = null;
     private MCCOrderController mccOrderController = null;
+    private AddProductController addProductController = null;
+    private RemoveProductController removeProductController = null;
+
+    public AddProductController getAddProductController() {
+        return addProductController;
+    }
+
+    public RemoveProductController getRemoveProductController() {
+        return removeProductController;
+    }
+
+    public MCCOrderController getMCCOrderController() {
+        return mccOrderController;
+    }
 
     public static Customer getInstance() {
     if (instance == null)
@@ -136,6 +160,6 @@ public class Customer {
         orderHistoryController = new OrderHistoryController(orderHistoryView, dao);
     
         mccOrderView = new MCCOrderView();
-        mccOrderController = new MccOrderController(mccOrderView, dao);
+        mccOrderController = new MCCOrderController(mccOrderView, dao);
     }
 }
