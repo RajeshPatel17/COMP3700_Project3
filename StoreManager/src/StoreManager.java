@@ -13,7 +13,7 @@ public class StoreManager {
     }
     
     public ManaLoginView getManaLoginView() {
-        return ManaLoginView;
+        return manaLoginView;
     }
 
     private ProductController productController = null;
