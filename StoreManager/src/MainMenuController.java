@@ -18,7 +18,7 @@ public class MainMenuController implements ActionListener{
             MainApp.getInstance().getMainMenuView().setVisible(false);
         }
         if(event.getSource() == thisMainView.ManaButton){
-            StoreManager.getInstance().getManagerLoginView().setVisible(true);
+            StoreManager.getInstance().getManaLoginView().setVisible(true);
             MainApp.getInstance().getMainMenuView().setVisible(false);
         }
     }
