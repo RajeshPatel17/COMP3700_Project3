@@ -10,6 +10,7 @@ public class MainApp {
     }
 
     private MainMenuController mainMenuController = null;
+    
     public static MainApp getInstance() {
         if (instance == null)
             instance = new MainApp();
