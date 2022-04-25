@@ -9,7 +9,8 @@ public class MCCOrderView extends JFrame{
     public JButton loadButton = new JButton("Load Order");
     public JButton saveButton = new JButton("Save Order");
     public JButton cancelButton = new JButton("Cancel Order");
-    public JButton addRemoveProductButton = new JButton("Add/Remove Product");
+    public JButton addProductButton = new JButton("Add Product");
+    public JButton removeProductButton = new JButton("Remove Product");
 
     public MCCOrderView(){
         this.setTitle("Edit Your Profile");
@@ -31,7 +32,8 @@ public class MCCOrderView extends JFrame{
         buttonPanel.add(loadButton);
         buttonPanel.add(saveButton);
         buttonPanel.add(cancelButton);
-        buttonPanel.add(addRemoveProductButton);
+        buttonPanel.add(addProductButton);
+        buttonPanel.add(removeProductButton);
         this.getContentPane().add(buttonPanel);
     }
 
