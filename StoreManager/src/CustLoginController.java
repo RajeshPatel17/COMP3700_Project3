@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -44,11 +43,11 @@ public class CustLoginController implements ActionListener{
             String userName = thisView.CustUserNameText.getText();
             String password = new String(thisView.CustomerPassText.getPassword());
 
-            javax.crypto.SecretKey secretKey = Encryption.createAESKey();
+            /*javax.crypto.SecretKey secretKey = Encryption.createAESKey();
             byte[] initializationVector = Encryption.createInitializationVector();
-            byte[] encryptedPassword = Encryption.do_AESEncryption(password, secretKey, initializationVector);
-            
-            int customerID = thisDAO.loginCustomer(userName, encryptedPassword, secretKey, initializationVector);
+            byte[] encryptedPassword = Encryption.do_AESEncryption(password, secretKey, initializationVector);*/
+            int customerID = thisDAO.loginUser(userName, password);
+            //int customerID = thisDAO.loginCustomer(userName, encryptedPassword, secretKey, initializationVector);
 
             if(customerID == -1){
                 throw new Exception("User does not exist!");

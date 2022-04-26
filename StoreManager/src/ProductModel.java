@@ -5,6 +5,8 @@ public class ProductModel {
     public double price;
     public double quantity;
 
+    public ProductModel(){};
+
     public String toString(){
         return "Product ID: " + productID + ", Name: " + name + ", Price: " + price + ", Quantity: " + quantity;
     }

@@ -31,6 +31,24 @@ public class CustChangePassController implements ActionListener{
     }
 
     private void changePass(){
-        compare old password to database and save new password in database
+        try{
+            String storedPass = thisDAO.getPassword(Customer.getInstance().getCustomerModel().customerID);
+            if(storedPass.equals(new String(thisView.oldPasswordText.getPassword()))){
+                boolean success = thisDAO.setPassword(Customer.getInstance().getCustomerModel().customerID, new String(thisView.newPasswordText.getPassword()));
+                if(!success){
+                    throw new Exception("Password Save Failed");
+                }
+                JOptionPane.showMessageDialog(null,"Password Saved Successfully");
+                Customer.getInstance().getCustChangePassView().dispose();
+                Customer.getInstance().getCustomerLoginView().setVisible(true);
+            } else {
+                throw new Exception("Pasword Mismatch");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            e.printStackTrace();
+        }
+
+        //compare old password to database and save new password in database
     }
 }

@@ -5,4 +5,6 @@ public class OrderModel {
     int customerID;
     double totalCost;
     double totalTax;
+
+    public OrderModel(){}
 }

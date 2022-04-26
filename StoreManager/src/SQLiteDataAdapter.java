@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.sql.Date;
+import java.util.*;
 /* Class that connects and interacts directly with database */
 public class SQLiteDataAdapter implements DataAccess {
     Connection conn = null;
@@ -181,6 +183,243 @@ public class SQLiteDataAdapter implements DataAccess {
             ex.printStackTrace();
         }
         return customer;
+    }
+
+    @Override
+    public int loginUser(String username, String password){
+        try{
+            Statement stmt = conn.createStatement();
+
+            ResultSet rs = stmt.executeQuery("SELECT UserID, Password FROM USER WHERE UserName = " + username);
+            if(rs.next()){
+                if(password.equals(rs.getString(1))){
+                    return rs.getInt(0);
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public String getPassword(int userID){
+        try{
+            Statement stmt = conn.createStatement();
+
+            ResultSet rs = stmt.executeQuery("SELECT Password FROM User WHERE UserID = " + userID);
+            if(rs.next()){
+                return rs.getString(0);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean setPassword(int userID, String password){
+        try{
+            Statement stmt = conn.createStatement();
+
+            stmt.executeQuery("UPDATE User SET "
+            + "Password = " + "\'" +  password + "\'" + ","
+            + " WHERE UserID = " + userID);
+
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateCustName(int custID, String name){
+        try{
+            Statement stmt = conn.createStatement();
+            
+            stmt.executeQuery("UPDATE Customers SET " 
+            + "CustomerName = " + "\'" + name + "\'"
+            + " WHERE CustomerID = " + custID);
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateDisplayName(int userID, String name){
+        try{
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM User WHERE DisplayName = " + name);
+            if(rs.next()){
+                throw new Exception("Display Name taken");
+            }
+            stmt.executeQuery("UPDATE User SET " 
+            + "DisplayName = " + "\'" + name + "\'"
+            + " WHERE UserID = " + userID);
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateDateOfBirth(int custID, String dateOfBirth){
+        try{
+            Statement stmt = conn.createStatement();
+            
+            stmt.executeQuery("UPDATE Customers SET " 
+            + "DateOfBirth = " + "\'" + dateOfBirth + "\'"
+            + " WHERE CustomerID = " + custID);
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateAddress(int custID, String address){
+        try{
+            Statement stmt = conn.createStatement();
+            
+            stmt.executeQuery("UPDATE Customers SET " 
+            + "Address = " + "\'" + address + "\'"
+            + " WHERE CustomerID = " + custID);
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public int getCustIDOfOrder(int orderID){
+        try{
+            Statement stmt = conn.createStatement();
+
+            ResultSet rs = stmt.executeQuery("SELECT CustomerID FROM Orders WHERE OrderID = " + orderID);
+            if(rs.next()){
+                return rs.getInt(0);
+            }
+            return -1;
+        } catch(Exception e){
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    public List<ProductModel> loadProductsInOrder(int orderID){
+        List<ProductModel> products = new ArrayList<ProductModel>();
+        try{
+            Statement stmt = conn.createStatement();
+
+            ResultSet rs = stmt.executeQuery("SELECT * FROM OrderLine WHERE OrderID = " + orderID);
+            while(rs.next()){
+                ProductModel p = new ProductModel();
+                p.productID = rs.getInt(2);
+                p.price = rs.getDouble(4);
+                p.quantity = rs.getDouble(3);
+                products.add(p);
+            }
+            for(ProductModel p : products){
+                rs = stmt.executeQuery("SELECT Name FROM Product WHERE ProductID = " + p.productID);
+                p.name = rs.getString(0);
+            }
+
+            return products;
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;	
+        }
+    }
+
+    public boolean saveOrder(int custID, List<ProductModel> products){
+        double totalCost = 0.00;
+        try{
+
+            Statement stmt = conn.createStatement();
+
+            ResultSet rs = stmt.executeQuery("SELECT OrderID FROM Orders ORDER BY OrderID ASC");
+
+            int orderID = 0;
+            while(rs.next() && rs.getInt(0) == ++orderID);
+
+            for(ProductModel product: products){
+                totalCost += product.quantity * product.price;
+                stmt.executeQuery("INSERT INTO OrderLine (OrderID, ProductID, Quantity, Cost) VALUES ("
+                + orderID + ","
+                + product.productID + ","
+                + product.quantity + ","
+                + product.price + ")");
+            }
+
+            stmt.executeQuery("INSERT INTO Orders (OrderID, OrderDate, CustomerID, TotalCost, TotalTax) VALUES ("
+            + orderID + ","
+            + "\'" + (new java.sql.Date(System.currentTimeMillis()).toString()) + "\'" + /*String.valueOf(new java.sql.Date(System.currentTimeMillis()))*/ + ","
+            + custID + ","
+            + totalCost + ","
+            + totalCost*.09 + ")");
+
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false; 
+        }
+    }
+
+    public boolean updateOrder(int orderID, List<ProductModel> products){
+        compare products to what is in table and update table to reflect list
+    }
+
+    public boolean cancelOrder(int orderID){
+        try{
+            Statement stmt = conn.createStatement();
+            stmt.executeQuery("DELETE * FROM OrderLine WHERE OrderID = " + orderID);
+            stmt.executeQuery("DELETE * FROM Orders WHERE OrderID = " + orderID);
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<OrderModel> getOrderHistory(int custID){
+        List<OrderModel> orderHistory = new ArrayList<OrderModel>();
+        try{
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Orders WHERE CustomerID = " + custID);
+
+            while(rs.next()){
+                OrderModel om = new OrderModel();
+                om.orderID = rs.getInt(0);
+                om.orderDate = rs.getString(1);
+                om.customerID = rs.getInt(2);
+                om.totalCost = rs.getDouble(3);
+                om.totalTax = rs.getDouble(4);
+                orderHistory.add(om);
+            }
+            return orderHistory;
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<ProductModel> getLikeProducts(String keyword){
+        List<ProductModel> products = new ArrayList<ProductModel>();
+        try{
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Product WHERE Name LIKE " + "%" + keyword + "%");
+            while(rs.next()){
+                ProductModel p = new ProductModel();
+                p.productID = rs.getInt(0);
+                p.name = rs.getString(1);
+                p.price = rs.getDouble(2);
+                p.quantity = rs.getDouble(3);
+                products.add(p);
+            }
+            return products;
+        } catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

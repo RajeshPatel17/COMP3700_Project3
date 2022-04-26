@@ -22,7 +22,15 @@ public class OrderHistoryController implements ActionListener{
     }
 
     private void getOrderHistory(){
-        gets order history of user
+        String orderHist = "";
+        for(OrderModel order: thisDAO.getOrderHistory(Customer.getInstance().getCustomerModel().customerID)){
+            orderHist += "Order ID: " + order.orderID + ", Order Date: " + order.orderDate + ", Total Cost: " + order.totalCost;
+            for(ProductModel product: thisDAO.loadProductsInOrder(order.orderID)){
+                orderHist += "\t" + product.toString();
+            }
+        }
+        thisView.orderHistoryArea.setText(orderHist);
+        //gets order history of user
     }
 
     private void back(){
