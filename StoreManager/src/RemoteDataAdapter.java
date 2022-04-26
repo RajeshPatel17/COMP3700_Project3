@@ -122,7 +122,8 @@ public class RemoteDataAdapter implements DataAccess {
                     CustomerModel customerModel = gson.fromJson(res.body, CustomerModel.class);
                     System.out.println("Saved the following Customer!");
                     System.out.println("CustomerID = " + customerModel.customerID);
-                    System.out.println("Name = " + customerModel.customerName);                        System.out.println("Price = " + customerModel.dateOfBirth);
+                    System.out.println("Name = " + customerModel.customerName);                        
+                    System.out.println("Price = " + customerModel.dateOfBirth);
                     System.out.println("Quantity = " + customerModel.address);
                     return true;
                 }
@@ -158,7 +159,8 @@ public class RemoteDataAdapter implements DataAccess {
                     CustomerModel customerModel = gson.fromJson(res.body, CustomerModel.class);
                     System.out.println("Receiving a CustomerModel object");
                     System.out.println("CustomerID = " + customerModel.customerID);
-                    System.out.println("Name = " + customerModel.customerName);                        System.out.println("Price = " + customerModel.dateOfBirth);
+                    System.out.println("Name = " + customerModel.customerName);                        
+                    System.out.println("Price = " + customerModel.dateOfBirth);
                     System.out.println("Quantity = " + customerModel.address);
                     return customerModel; // found this customer and return!!!
                 }

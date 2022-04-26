@@ -352,7 +352,7 @@ public class SQLiteDataAdapter implements DataAccess {
 
             stmt.executeQuery("INSERT INTO Orders (OrderID, OrderDate, CustomerID, TotalCost, TotalTax) VALUES ("
             + orderID + ","
-            + "\'" + (new java.sql.Date(System.currentTimeMillis()).toString()) + "\'" + /*String.valueOf(new java.sql.Date(System.currentTimeMillis()))*/ + ","
+            + "\'" + (new java.sql.Date(System.currentTimeMillis()).toString()) + "\'" /*+ /*String.valueOf(new java.sql.Date(System.currentTimeMillis()))*/ + ","
             + custID + ","
             + totalCost + ","
             + totalCost*.09 + ")");
@@ -365,7 +365,18 @@ public class SQLiteDataAdapter implements DataAccess {
     }
 
     public boolean updateOrder(int orderID, List<ProductModel> products){
-        compare products to what is in table and update table to reflect list
+        try{
+            int custID = getCustIDOfOrder(orderID);
+            cancelOrder(orderID);
+            saveOrder(custID, products);
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+
+        //compare products to what is in table and update table to reflect list
     }
 
     public boolean cancelOrder(int orderID){
@@ -419,6 +430,51 @@ public class SQLiteDataAdapter implements DataAccess {
         } catch(Exception e){
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public boolean saveNewCustomer(String userName, String password, String dispName, String custName, String dateOfBirth, String address){
+        try{
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM User");
+
+            int userID = rs.getInt(0)+1;
+
+            rs = stmt.executeQuery("SELECT * FROM User WHERE UserName = " + userName);
+            if(rs.next()){
+                throw new Exception("User Name taken");
+            }
+            stmt.executeQuery("INSERT INTO User (UserID, UserName, Password, DisplayName) VALUES (" 
+            + userID + "," 
+            + "\'" + userName + "\'" + ","
+            + "\'" + password + "\'" + ","
+            + "\'" + dispName + "\'" + ")");
+
+            stmt.executeQuery("INSERT INTO Customers (CustomerID, CustomerName, DateOfBirth, Address) VALUES ("
+            + userID + "," 
+            + "\'" + custName + "\'" + "," 
+            + "\'" + dateOfBirth + "\'" + ","
+            + "\'" + address + "\'" + ")");
+            return true;
+
+        } catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean loginMana(String username, String password){
+        try{
+            Statement stmt = conn.createStatement();
+
+            ResultSet rs = stmt.executeQuery("SELECT IsManager FROM User WHERE UserName = " + username + " AND Password = " + password);
+            if(rs.next()){
+                return rs.getBoolean(0);
+            }
+            return false;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
         }
     }
 

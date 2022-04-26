@@ -43,4 +43,7 @@ public interface DataAccess {
 
     List<ProductModel> getLikeProducts(String keyword);
 
+    boolean saveNewCustomer(String userName, String password, String dispName, String custName, String dateOfBirth, String address);
+
+    boolean loginMana(String username, String password);
 }

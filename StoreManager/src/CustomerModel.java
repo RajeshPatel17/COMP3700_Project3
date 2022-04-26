@@ -4,4 +4,6 @@ public class CustomerModel {
     String customerName;
     String dateOfBirth;
     String address;
+
+    public CustomerModel(){}
 }

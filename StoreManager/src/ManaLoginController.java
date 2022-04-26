@@ -30,6 +30,21 @@ public class ManaLoginController implements ActionListener{
     }
 
     private void manaLogin(){
-        log manager into system similar to customer and switch to product view
+        try{
+            String userName = thisView.manaUserNameText.getText();
+            String password = new String(thisView.manaPassText.getPassword());
+            boolean manager = thisDAO.loginMana(userName, password);
+            if(!manager) {
+                throw new Exception("Login failed");
+            } else {
+                StoreManager.getInstance().getManaLoginView().setVisible(false);
+                StoreManager.getInstance().getProductView().setVisible(true);
+            }
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+
+
+        //log manager into system similar to customer and switch to product view
     }
 }

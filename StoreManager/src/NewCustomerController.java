@@ -43,6 +43,27 @@ public class NewCustomerController implements ActionListener{
     }
 
     private void saveNewCustomer() {
-        save to user table and customer table
+        try{
+            String userName = thisView.userNameText.getText();
+            String password = new String(thisView.passwordText.getPassword());
+            String dispName = thisView.displayNameText.getText();
+            String custName = thisView.customerNameText.getText();
+            String dateOfBirth = thisView.dateOfBirthText.getText();
+            String address = thisView.addressText.getText();
+    
+            boolean success = thisDAO.saveNewCustomer(userName, password, dispName, custName, dateOfBirth, address);
+            
+            if(success){
+                JOptionPane.showMessageDialog(null, "Created New Customer Successfully");
+                back();
+            } else {
+                throw new Exception("Failed to Create New Customer");
+            }
+    
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            e.printStackTrace();
+        }
+        //save to user table and customer table
     }
 }
