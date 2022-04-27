@@ -99,6 +99,8 @@ public class Customer {
     private AddProductController addProductController = null;
     private RemoveProductController removeProductController = null;
 
+    public ProductSearchController getProductSearchController(){return productSearchController;}
+
     public AddProductController getAddProductController() {
         return addProductController;
     }

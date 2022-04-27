@@ -160,8 +160,8 @@ public class RemoteDataAdapter implements DataAccess {
                     System.out.println("Receiving a CustomerModel object");
                     System.out.println("CustomerID = " + customerModel.customerID);
                     System.out.println("Name = " + customerModel.customerName);                        
-                    System.out.println("Price = " + customerModel.dateOfBirth);
-                    System.out.println("Quantity = " + customerModel.address);
+                    System.out.println("DateOfBirth = " + customerModel.dateOfBirth);
+                    System.out.println("Address = " + customerModel.address);
                     return customerModel; // found this customer and return!!!
                 }
             }       

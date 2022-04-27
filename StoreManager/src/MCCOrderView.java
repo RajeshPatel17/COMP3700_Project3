@@ -14,7 +14,7 @@ public class MCCOrderView extends JFrame{
 
     public MCCOrderView(){
         this.setTitle("Edit Your Profile");
-        this.setSize(new Dimension(600, 300));
+        this.setSize(new Dimension(700, 500));
         this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
 
         JPanel line1 = new JPanel();

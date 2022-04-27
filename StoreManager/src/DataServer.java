@@ -295,7 +295,7 @@ class ClientHandler extends Thread
 
                     case RequestModel.SAVE_ORDER:
                         int soCustID = gson.fromJson(req.body, Integer.class);
-                        List<ProductModel> soProducts = Arrays.asList(gson.fromJson(req.body, ProductModel[].class));
+                        List<ProductModel> soProducts = Arrays.asList(gson.fromJson(req.body1, ProductModel[].class));
                         System.out.println("The client asks to save an order with: " + soProducts);
                         if(!dao.saveOrder(soCustID, soProducts)){
                             res.code = ResponseModel.DATA_NOT_FOUND;
@@ -307,7 +307,7 @@ class ClientHandler extends Thread
 
                     case RequestModel.UPDATE_ORDER:
                         int uoOrderID = gson.fromJson(req.body, Integer.class);
-                        List<ProductModel> uoProducts = Arrays.asList(gson.fromJson(req.body, ProductModel[].class));
+                        List<ProductModel> uoProducts = Arrays.asList(gson.fromJson(req.body1, ProductModel[].class));
                         System.out.println("The client asks to update order: " + uoOrderID);
                         if(!dao.updateOrder(uoOrderID, uoProducts)){
                             res.code = ResponseModel.DATA_NOT_FOUND;

@@ -40,15 +40,21 @@ public class RemoveProductController implements ActionListener{
 
     private void back(){
         thisView.setVisible(false);
-        Customer.getInstance().getProductSearchView().setVisible(true);
+        Customer.getInstance().getMCCOrderView().setVisible(true);
+        Customer.getInstance().getMCCOrderController().displayProduct();
     }
 
     private void displayProduct(int i){
-        ProductModel thisProduct = products.get(i);
-        thisView.productIDText.setText(String.valueOf(thisProduct.productID));
-        thisView.productNameText.setText(thisProduct.name);
-        thisView.costText.setText(String.valueOf(thisProduct.price));
-        thisView.selectedQuantityText.setText(String.valueOf(thisProduct.quantity));
+        try{
+            ProductModel thisProduct = products.get(i);
+            thisView.productIDText.setText(String.valueOf(thisProduct.productID));
+            thisView.productNameText.setText(thisProduct.name);
+            thisView.costText.setText(String.valueOf(thisProduct.price));
+            thisView.selectedQuantityText.setText(String.valueOf(thisProduct.quantity));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     private void nextProduct(){
@@ -63,7 +69,7 @@ public class RemoveProductController implements ActionListener{
 
     private void removeProduct(){
         try{
-            ProductModel thisProduct = products.get(index);
+            ProductModel thisProduct = products.get(index%products.size());
             Customer.getInstance().getMCCOrderController().removeProduct(thisProduct);
             back();
             JOptionPane.showMessageDialog(null,"Product Removed");

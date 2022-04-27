@@ -24,6 +24,11 @@ public class ProductSearchView extends JFrame{
         JPanel line2 = new JPanel();
         line2.add(resultArea);
         this.getContentPane().add(line2);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(backButton);
+        buttonPanel.add(searchButton);
+        this.getContentPane().add(buttonPanel);
     }
 
 }

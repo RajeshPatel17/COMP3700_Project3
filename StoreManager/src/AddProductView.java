@@ -53,6 +53,6 @@ public class AddProductView extends JFrame{
         buttonPanel.add(prevProductButton);
         buttonPanel.add(addProductButton);
         buttonPanel.add(nextProductButton);
-        
+        this.getContentPane().add(buttonPanel);
     }
 }

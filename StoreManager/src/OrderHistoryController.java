@@ -10,7 +10,7 @@ public class OrderHistoryController implements ActionListener{
         thisView = view;
         thisDAO = dao;
         thisView.backButton.addActionListener(this);
-        getOrderHistory();
+        thisView.loadButton.addActionListener(this);
     }
 
     @Override
@@ -18,15 +18,22 @@ public class OrderHistoryController implements ActionListener{
         if(event.getSource() == thisView.backButton){
             back();
         }
+        if(event.getSource() == thisView.loadButton){
+            getOrderHistory();
+        }
+
+
     }
 
     private void getOrderHistory(){
+        while(!thisView.isVisible());
         String orderHist = "";
         for(OrderModel order: thisDAO.getOrderHistory(Customer.getInstance().getCustomerModel().customerID)){
             orderHist += "Order ID: " + order.orderID + ", Order Date: " + order.orderDate + ", Total Cost: " + order.totalCost;
             for(ProductModel product: thisDAO.loadProductsInOrder(order.orderID)){
-                orderHist += "\t" + product.toString();
+                orderHist += "\n\t" + product.toString();
             }
+            orderHist+="\n";
         }
         thisView.orderHistoryArea.setText(orderHist);
         //gets order history of user

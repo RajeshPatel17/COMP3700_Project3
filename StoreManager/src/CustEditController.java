@@ -63,7 +63,10 @@ public class CustEditController implements ActionListener{
             }
             if(!thisView.addressText.getText().isEmpty()){
                 success = success && thisDAO.updateAddress(Customer.getInstance().getCustomerModel().customerID, thisView.addressText.getText());
-                throw new Exception("Failed To Update Address");
+                if(!success){
+                    throw new Exception("Failed To Update Address");
+                }
+
             }
             if(success){
                 JOptionPane.showMessageDialog(null, "Information Updated Successfully");

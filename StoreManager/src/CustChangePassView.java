@@ -3,8 +3,8 @@ import java.awt.*;
 
 public class CustChangePassView extends JFrame{
 
-    public JPasswordField oldPasswordText = new JPasswordField();
-    public JPasswordField newPasswordText = new JPasswordField();
+    public JPasswordField oldPasswordText = new JPasswordField(30);
+    public JPasswordField newPasswordText = new JPasswordField(30);
 
     public JButton backButton = new JButton("Back");
     public JButton saveButton = new JButton("Save New Password");

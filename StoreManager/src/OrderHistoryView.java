@@ -5,6 +5,7 @@ public class OrderHistoryView extends JFrame{
     public JTextArea orderHistoryArea = new JTextArea(30,30);
 
     public JButton backButton = new JButton("Back");
+    public JButton loadButton = new JButton("Load History");
 
     public OrderHistoryView(){
         this.setTitle("Your Order History");
@@ -16,11 +17,13 @@ public class OrderHistoryView extends JFrame{
         this.getContentPane().add(line1);
 
         JPanel line2 = new JPanel();
+        orderHistoryArea.setEditable(false);
         line2.add(orderHistoryArea);
         this.getContentPane().add(line2);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(backButton);
+        buttonPanel.add(loadButton);
         this.getContentPane().add(buttonPanel);
     }
 }

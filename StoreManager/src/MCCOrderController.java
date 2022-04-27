@@ -7,12 +7,12 @@ public class MCCOrderController implements ActionListener{
 
     MCCOrderView thisView;
     DataAccess thisDAO;
-    private List<ProductModel> products;
+    public List<ProductModel> products;
 
     MCCOrderController(MCCOrderView view, DataAccess access){
         thisView = view;
         thisDAO = access;
-        products = new ArrayList<ProductModel>();
+        products = new LinkedList<>();
         thisView.backButton.addActionListener(this);
         thisView.orderIDText.addActionListener(this);
         thisView.loadButton.addActionListener(this);
@@ -55,15 +55,11 @@ public class MCCOrderController implements ActionListener{
     private void loadOrder(){
         try{
             if((!thisView.orderIDText.getText().isEmpty()) && thisDAO.getCustIDOfOrder(Integer.valueOf(thisView.orderIDText.getText())) == Customer.getInstance().getCustomerModel().customerID){
-                products = thisDAO.loadProductsInOrder(Integer.parseInt(thisView.orderIDText.getText()));
+                products = new LinkedList<>(thisDAO.loadProductsInOrder(Integer.parseInt(thisView.orderIDText.getText())));
                 if(products == null){
                     throw new Exception("Order not found");
                 }
-                String productText = "";
-                for(ProductModel product : products){
-                    productText += product.toString();
-                }
-                thisView.productArea.setText(productText);
+                displayProduct();
             } else {
                 throw new Exception("Order Information Denied");
             }
@@ -122,6 +118,11 @@ public class MCCOrderController implements ActionListener{
                     throw new Exception("Action Denied");
                 }
             }
+            if(success){
+                JOptionPane.showMessageDialog(null, "Order Cancelled");
+                thisView.orderIDText.setText("");
+                thisView.productArea.setText("");
+            }
         } catch (Exception e){
             JOptionPane.showMessageDialog(null,e.getMessage());
             e.printStackTrace();
@@ -130,7 +131,7 @@ public class MCCOrderController implements ActionListener{
         //delete order of order id if placed by customer
     }
 
-    private void displayProduct(){
+    public void displayProduct(){
         String productText = "";
         for(ProductModel product: products){
             productText += product.toString() + "\n";
@@ -140,7 +141,8 @@ public class MCCOrderController implements ActionListener{
 
     private void addProduct(){
         Customer.getInstance().getProductSearchView().setVisible(true);
-        while(Customer.getInstance().getProductSearchView().isShowing());
+        thisView.setVisible(false);
+        //while(Customer.getInstance().getProductSearchView().isShowing());
         //Customer.getInstance().getAddProductView().setVisible(true);
         //while(Customer.getInstance().getAddProductView().isShowing());
 
@@ -154,14 +156,16 @@ public class MCCOrderController implements ActionListener{
     private void removeProduct(){
         RemoveProductView view = new RemoveProductView();
         RemoveProductController controller = new RemoveProductController(view, thisDAO, products);
-        while(view.isVisible());
+        view.setVisible(true);
+        thisView.setVisible(false);
+        //while(view.isVisible());
 
-        displayProduct();
+        //displayProduct();
         //create remove product view where user inputs product id and can adjust quantity or delete product of that id in their order. Must create a set method in remove product controller to pass product list.
     }
 
     public void removeProduct(ProductModel product){
-        products.remove(product);
+            products.remove(product);
     }
     
 }

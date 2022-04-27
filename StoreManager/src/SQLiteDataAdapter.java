@@ -190,10 +190,11 @@ public class SQLiteDataAdapter implements DataAccess {
         try{
             Statement stmt = conn.createStatement();
 
-            ResultSet rs = stmt.executeQuery("SELECT UserID, Password FROM USER WHERE UserName = " + username);
+            ResultSet rs = stmt.executeQuery("SELECT UserID, Password FROM USER WHERE UserName = " + '\'' + username + '\'');
             if(rs.next()){
-                if(password.equals(rs.getString(1))){
-                    return rs.getInt(0);
+                System.out.println(rs.getInt(1));
+                if(password.equals(rs.getString(2))){
+                    return rs.getInt(1);
                 }
             }
         } catch (Exception e){
@@ -208,7 +209,7 @@ public class SQLiteDataAdapter implements DataAccess {
 
             ResultSet rs = stmt.executeQuery("SELECT Password FROM User WHERE UserID = " + userID);
             if(rs.next()){
-                return rs.getString(0);
+                return rs.getString(1);
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -220,8 +221,8 @@ public class SQLiteDataAdapter implements DataAccess {
         try{
             Statement stmt = conn.createStatement();
 
-            stmt.executeQuery("UPDATE User SET "
-            + "Password = " + "\'" +  password + "\'" + ","
+            stmt.executeUpdate("UPDATE User SET "
+            + "Password = " + '\'' +  password + '\'' //+ ","
             + " WHERE UserID = " + userID);
 
             return true;
@@ -235,8 +236,8 @@ public class SQLiteDataAdapter implements DataAccess {
         try{
             Statement stmt = conn.createStatement();
             
-            stmt.executeQuery("UPDATE Customers SET " 
-            + "CustomerName = " + "\'" + name + "\'"
+            stmt.executeUpdate("UPDATE Customers SET " 
+            + "CustomerName = " + '\'' + name + '\''
             + " WHERE CustomerID = " + custID);
             return true;
         } catch (Exception e){
@@ -248,12 +249,12 @@ public class SQLiteDataAdapter implements DataAccess {
     public boolean updateDisplayName(int userID, String name){
         try{
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM User WHERE DisplayName = " + name);
+            ResultSet rs = stmt.executeQuery("SELECT * FROM User WHERE DisplayName = " + '\'' + name + '\'');
             if(rs.next()){
                 throw new Exception("Display Name taken");
             }
-            stmt.executeQuery("UPDATE User SET " 
-            + "DisplayName = " + "\'" + name + "\'"
+            stmt.executeUpdate("UPDATE User SET " 
+            + "DisplayName = " + '\'' + name + '\''
             + " WHERE UserID = " + userID);
             return true;
         } catch (Exception e){
@@ -266,8 +267,8 @@ public class SQLiteDataAdapter implements DataAccess {
         try{
             Statement stmt = conn.createStatement();
             
-            stmt.executeQuery("UPDATE Customers SET " 
-            + "DateOfBirth = " + "\'" + dateOfBirth + "\'"
+            stmt.executeUpdate("UPDATE Customers SET " 
+            + "DateOfBirth = " + '\'' + dateOfBirth + '\''
             + " WHERE CustomerID = " + custID);
             return true;
         } catch (Exception e){
@@ -280,8 +281,8 @@ public class SQLiteDataAdapter implements DataAccess {
         try{
             Statement stmt = conn.createStatement();
             
-            stmt.executeQuery("UPDATE Customers SET " 
-            + "Address = " + "\'" + address + "\'"
+            stmt.executeUpdate("UPDATE Customers SET " 
+            + "Address = " + '\'' + address + '\''
             + " WHERE CustomerID = " + custID);
             return true;
         } catch (Exception e){
@@ -296,7 +297,7 @@ public class SQLiteDataAdapter implements DataAccess {
 
             ResultSet rs = stmt.executeQuery("SELECT CustomerID FROM Orders WHERE OrderID = " + orderID);
             if(rs.next()){
-                return rs.getInt(0);
+                return rs.getInt(1);
             }
             return -1;
         } catch(Exception e){
@@ -313,14 +314,14 @@ public class SQLiteDataAdapter implements DataAccess {
             ResultSet rs = stmt.executeQuery("SELECT * FROM OrderLine WHERE OrderID = " + orderID);
             while(rs.next()){
                 ProductModel p = new ProductModel();
-                p.productID = rs.getInt(2);
-                p.price = rs.getDouble(4);
-                p.quantity = rs.getDouble(3);
+                p.productID = rs.getInt(3);
+                p.price = rs.getDouble(5);
+                p.quantity = rs.getDouble(4);
                 products.add(p);
             }
             for(ProductModel p : products){
                 rs = stmt.executeQuery("SELECT Name FROM Product WHERE ProductID = " + p.productID);
-                p.name = rs.getString(0);
+                p.name = rs.getString(1);
             }
 
             return products;
@@ -339,20 +340,20 @@ public class SQLiteDataAdapter implements DataAccess {
             ResultSet rs = stmt.executeQuery("SELECT OrderID FROM Orders ORDER BY OrderID ASC");
 
             int orderID = 0;
-            while(rs.next() && rs.getInt(0) == ++orderID);
+            while(rs.next() && rs.getInt(1) == ++orderID);
 
             for(ProductModel product: products){
                 totalCost += product.quantity * product.price;
-                stmt.executeQuery("INSERT INTO OrderLine (OrderID, ProductID, Quantity, Cost) VALUES ("
+                stmt.execute("INSERT INTO OrderLine (OrderID, ProductID, Quantity, Cost) VALUES ("
                 + orderID + ","
                 + product.productID + ","
                 + product.quantity + ","
                 + product.price + ")");
             }
 
-            stmt.executeQuery("INSERT INTO Orders (OrderID, OrderDate, CustomerID, TotalCost, TotalTax) VALUES ("
+            stmt.execute("INSERT INTO Orders (OrderID, OrderDate, CustomerID, TotalCost, TotalTax) VALUES ("
             + orderID + ","
-            + "\'" + (new java.sql.Date(System.currentTimeMillis()).toString()) + "\'" /*+ /*String.valueOf(new java.sql.Date(System.currentTimeMillis()))*/ + ","
+            + '\'' + (new java.sql.Date(System.currentTimeMillis()).toString()) + '\'' /*+ /*String.valueOf(new java.sql.Date(System.currentTimeMillis()))*/ + ","
             + custID + ","
             + totalCost + ","
             + totalCost*.09 + ")");
@@ -382,8 +383,8 @@ public class SQLiteDataAdapter implements DataAccess {
     public boolean cancelOrder(int orderID){
         try{
             Statement stmt = conn.createStatement();
-            stmt.executeQuery("DELETE * FROM OrderLine WHERE OrderID = " + orderID);
-            stmt.executeQuery("DELETE * FROM Orders WHERE OrderID = " + orderID);
+            stmt.execute("DELETE FROM OrderLine WHERE OrderID = " + orderID);
+            stmt.execute("DELETE FROM Orders WHERE OrderID = " + orderID);
             return true;
         } catch (Exception e){
             e.printStackTrace();
@@ -399,11 +400,11 @@ public class SQLiteDataAdapter implements DataAccess {
 
             while(rs.next()){
                 OrderModel om = new OrderModel();
-                om.orderID = rs.getInt(0);
-                om.orderDate = rs.getString(1);
-                om.customerID = rs.getInt(2);
-                om.totalCost = rs.getDouble(3);
-                om.totalTax = rs.getDouble(4);
+                om.orderID = rs.getInt(1);
+                om.orderDate = rs.getString(2);
+                om.customerID = rs.getInt(3);
+                om.totalCost = rs.getDouble(4);
+                om.totalTax = rs.getDouble(5);
                 orderHistory.add(om);
             }
             return orderHistory;
@@ -417,13 +418,13 @@ public class SQLiteDataAdapter implements DataAccess {
         List<ProductModel> products = new ArrayList<ProductModel>();
         try{
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Product WHERE Name LIKE " + "%" + keyword + "%");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Product WHERE Name LIKE " + "'%" + keyword + "%'");
             while(rs.next()){
                 ProductModel p = new ProductModel();
-                p.productID = rs.getInt(0);
-                p.name = rs.getString(1);
-                p.price = rs.getDouble(2);
-                p.quantity = rs.getDouble(3);
+                p.productID = rs.getInt(1);
+                p.name = rs.getString(2);
+                p.price = rs.getDouble(3);
+                p.quantity = rs.getDouble(4);
                 products.add(p);
             }
             return products;
@@ -437,24 +438,26 @@ public class SQLiteDataAdapter implements DataAccess {
         try{
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM User");
+            rs.next();
+            int userID = rs.getInt("COUNT(*)")+1;
 
-            int userID = rs.getInt(0)+1;
-
-            rs = stmt.executeQuery("SELECT * FROM User WHERE UserName = " + userName);
-            if(rs.next()){
+            rs = stmt.executeQuery("SELECT COUNT(*) FROM User WHERE UserName = " + '\'' + userName + '\'');
+            rs.next();
+            boolean taken = rs.getInt("COUNT(*)") > 0;
+            if(taken){
                 throw new Exception("User Name taken");
             }
-            stmt.executeQuery("INSERT INTO User (UserID, UserName, Password, DisplayName) VALUES (" 
+            stmt.execute("INSERT INTO User (UserID, UserName, Password, DisplayName) VALUES (" 
             + userID + "," 
-            + "\'" + userName + "\'" + ","
-            + "\'" + password + "\'" + ","
-            + "\'" + dispName + "\'" + ")");
+            + '\'' + userName + '\'' + ","
+            + '\'' + password + '\'' + ","
+            + '\'' + dispName + '\'' + ")");
 
-            stmt.executeQuery("INSERT INTO Customers (CustomerID, CustomerName, DateOfBirth, Address) VALUES ("
+            stmt.execute("INSERT INTO Customers (CustomerID, CustomerName, DateOfBirth, Address) VALUES ("
             + userID + "," 
-            + "\'" + custName + "\'" + "," 
-            + "\'" + dateOfBirth + "\'" + ","
-            + "\'" + address + "\'" + ")");
+            + '\'' + custName + '\'' + "," 
+            + '\'' + dateOfBirth + '\'' + ","
+            + '\'' + address + '\'' + ")");
             return true;
 
         } catch(Exception e){
@@ -467,9 +470,9 @@ public class SQLiteDataAdapter implements DataAccess {
         try{
             Statement stmt = conn.createStatement();
 
-            ResultSet rs = stmt.executeQuery("SELECT IsManager FROM User WHERE UserName = " + username + " AND Password = " + password);
+            ResultSet rs = stmt.executeQuery("SELECT IsManager FROM User WHERE UserName = " + '\'' + username + '\'' + " AND Password = " + '\'' + password + '\'');
             if(rs.next()){
-                return rs.getBoolean(0);
+                return rs.getBoolean(1);
             }
             return false;
         } catch (Exception e){

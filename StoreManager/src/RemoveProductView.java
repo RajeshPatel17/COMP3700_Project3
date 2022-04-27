@@ -48,6 +48,6 @@ public class RemoveProductView extends JFrame{
         buttonPanel.add(prevProductButton);
         buttonPanel.add(removeProductButton);
         buttonPanel.add(nextProductButton);
-        
+        this.getContentPane().add(buttonPanel);
     }
 }

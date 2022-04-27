@@ -31,6 +31,7 @@ public class ProductSearchController implements ActionListener{
         results = thisDAO.getLikeProducts(keyword);
         AddProductView prodView = new AddProductView();
         AddProductController prodController = new AddProductController(prodView, thisDAO, results);
+        prodView.setVisible(true);
         
 
         //search all products in database with name like keyword and return set
@@ -38,7 +39,7 @@ public class ProductSearchController implements ActionListener{
 
     private void back(){
         Customer.getInstance().getProductSearchView().setVisible(false);
-        Customer.getInstance().getCustomerMenuView().setVisible(true);
+        Customer.getInstance().getMCCOrderView().setVisible(true);
     }
     
 }

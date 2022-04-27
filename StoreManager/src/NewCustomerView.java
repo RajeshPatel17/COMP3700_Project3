@@ -55,6 +55,7 @@ public class NewCustomerView extends JFrame{
         buttonPanel.add(backButton);
         buttonPanel.add(clearButton);
         buttonPanel.add(saveButton);
+        this.getContentPane().add(buttonPanel);
 
     }
 

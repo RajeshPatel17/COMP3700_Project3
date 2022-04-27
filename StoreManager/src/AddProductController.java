@@ -41,15 +41,21 @@ public class AddProductController implements ActionListener{
     private void back(){
         thisView.setVisible(false);
         Customer.getInstance().getProductSearchView().setVisible(true);
+        Customer.getInstance().getMCCOrderController().displayProduct();
     }
 
     private void displayProduct(int i){
-        ProductModel thisProduct = products.get(i);
-        thisView.productIDText.setText(String.valueOf(thisProduct.productID));
-        thisView.productNameText.setText(thisProduct.name);
-        thisView.costText.setText(String.valueOf(thisProduct.price));
-        thisView.maxQuantityText.setText(String.valueOf(thisProduct.quantity));
-        thisView.selectedQuantityText.setText("");
+        try{
+            ProductModel thisProduct = products.get(i);
+            thisView.productIDText.setText(String.valueOf(thisProduct.productID));
+            thisView.productNameText.setText(thisProduct.name);
+            thisView.costText.setText(String.valueOf(thisProduct.price));
+            thisView.maxQuantityText.setText(String.valueOf(thisProduct.quantity));
+            thisView.selectedQuantityText.setText("");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     private void nextProduct(){
@@ -64,7 +70,7 @@ public class AddProductController implements ActionListener{
 
     private void addProduct(){
         try{
-            ProductModel thisProduct = products.get(index);
+            ProductModel thisProduct = products.get(index%products.size());
             int selectedQuantity = Integer.parseInt(thisView.selectedQuantityText.getText());
             if(selectedQuantity>thisProduct.quantity || selectedQuantity<1){
                 throw new Exception("Invalid Quantity");
